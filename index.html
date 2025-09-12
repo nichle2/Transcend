@@ -12,17 +12,122 @@
         footer a:hover { color: #ffffff; }
         #custom-consent-banner, #custom-consent-modal { display: none; z-index: 2147483647; }
         #custom-consent-banner.visible, #custom-consent-modal.visible { display: flex; }
-        #custom-consent-banner { position: fixed; bottom: 0; width: 100%; background-color: #eaf0f6; color: #1c1c1b; border-top: 1px solid #d8dde1; padding: 15px 30px; box-sizing: border-box; align-items: center; justify-content: center; }
+        #custom-consent-banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #eaf0f6;
+            color: #1c1c1b;
+            border-top: 1px solid #d8dde1;
+            padding: 30px 30px; /* Increased vertical padding for more height */
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+        }
         #custom-consent-banner .content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; width: 100%; gap: 20px; }
         #custom-consent-banner p a { color: #1c1c1b; font-weight: bold; text-decoration: underline; cursor: pointer; }
         #custom-consent-banner .close-btn { font-size: 20px; border: 1px solid #aaa; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; background: transparent; flex-shrink: 0; }
-        #custom-consent-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); align-items: center; justify-content: center; }
-        #custom-consent-modal .modal-content { background-color: #eaf0f6; padding: 40px; border-radius: 8px; text-align: center; max-width: 850px; width: 90%; }
-        #custom-consent-modal h2 { font-size: 24px; font-weight: bold; margin-bottom: 30px; }
-        #custom-consent-modal .toggles-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 40px; }
-        #custom-consent-modal label { display: flex; align-items: center; cursor: pointer; }
-        #custom-consent-modal input[type="checkbox"] { width: 20px; height: 20px; margin-right: 8px; accent-color: #0d2f53; }
-        #custom-consent-modal .confirm-btn { background-color: #0d2f53; color: white; border: none; border-radius: 5px; padding: 15px 50px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        #custom-consent-banner .confirm-btn {
+            background-color: #0d2f53;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 1.5em;
+            margin-top: 0;
+            align-self: auto;
+            transition: background 0.2s;
+            width: auto;
+            min-width: 0;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        #custom-consent-banner .confirm-btn:hover {
+            background: #143d6b;
+        }
+        #custom-consent-modal {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: auto;
+            top: auto;
+            background-color: #eaf0f6;
+            color: #1c1c1b;
+            border-top: 1px solid #d8dde1;
+            box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
+            align-items: center;
+            justify-content: center;
+            z-index: 2147483647;
+            display: none;
+            padding: 30px 0; /* Add vertical padding for more height above/below confirm button */
+        }
+        #custom-consent-modal.visible {
+            display: flex;
+        }
+        #custom-consent-modal .modal-content {
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 0;
+        }
+        #custom-consent-modal .modal-content h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 1em;
+            margin-top: 0;
+            color: inherit;
+            display: block;
+        }
+        #custom-consent-modal .modal-row {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5em;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        #custom-consent-modal .toggles-row {
+            display: contents;
+        }
+        #custom-consent-modal .toggles-container {
+            display: flex;
+            gap: 1.5em;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 0;
+        }
+        #custom-consent-modal .confirm-btn {
+            background-color: #0d2f53;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 1.5em;
+            margin-top: 0;
+            align-self: auto;
+            transition: background 0.2s;
+            width: auto;
+            min-width: 0;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        #custom-consent-modal .confirm-btn:hover {
+            background: #143d6b;
+        }
         .view-state-btns { margin: 2rem 0; display: flex; gap: 1rem; justify-content: center; }
         .view-state-btns button { padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #0d2f53; background: #eaf0f6; color: #0d2f53; cursor: pointer; }
         .view-state-btns button.active { background: #0d2f53; color: #fff; }
@@ -59,16 +164,17 @@
         <div class="content">
             <div>
                 <p style="font-size: 1.5em; font-weight: bold; margin-bottom: 1em;">To offer a personalized experience, this site uses cookies & tracking technologies.</p>
-                <div style="display: flex; flex-direction: column; gap: 0.5em;">
-                    <p style="margin-bottom: 0.5em;">By using our sites, you consent to the recording, use, & sharing of your site activity by us & our providers & agree to our latest 
-                        <a href="https://www.vsp.com/legal/privacy-statement" target="_blank" rel="noopener noreferrer">Privacy Statement</a> & 
-                        <a href="https://www.vsp.com/legal/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a> including the 
-                        <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Class Action Waiver</a> & 
-                        <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Mandatory Arbitration</a>. 
-                        Manage your cookie preferences by clicking on the “Your Cookie Choices” link at the bottom of the page or with the following choices:
-                    </p>
+                <div style="margin-bottom: 0.5em;">
+                    By using our sites, you consent to the recording, use, & sharing of your site activity by us & our providers & agree to our latest 
+                    <a href="https://www.vsp.com/legal/privacy-statement" target="_blank" rel="noopener noreferrer">Privacy Statement</a> & 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a> including the 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Class Action Waiver</a> & 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Mandatory Arbitration</a>. 
+                    Manage your cookie preferences by clicking on the “Your Cookie Choices” link at the bottom of the page or with the following choices:
+                </div>
+                <div style="display: flex; flex-direction: row; gap: 1.5em; align-items: center; flex-wrap: wrap;">
                     <div id="banner-toggles-row" style="display: flex; gap: 1.5em; align-items: center; flex-wrap: wrap;"></div>
-                    <button id="banner-confirm-btn" class="confirm-btn" style="margin-top: 1em;">CONFIRM</button>
+                    <button id="banner-confirm-btn" class="confirm-btn" style="margin-left: 1.5em; margin-top: 0; align-self: auto;">CONFIRM</button>
                 </div>
             </div>
             <button id="close-banner-btn" class="close-btn" aria-label="Close banner">✕</button>
@@ -78,10 +184,12 @@
     <div id="custom-consent-modal">
         <form id="consent-form" class="modal-content">
             <h2 id="consent-modal-title">Please select which types of cookies you would like to have enabled:</h2>
-            <div class="toggles-container" id="toggles-container">
-                <!-- Toggles will be injected here based on region -->
+            <div class="modal-row">
+                <div class="toggles-container" id="toggles-container">
+                    <!-- Toggles will be injected here based on region -->
+                </div>
+                <button type="submit" class="confirm-btn">CONFIRM</button>
             </div>
-            <button type="submit" class="confirm-btn">CONFIRM</button>
         </form>
     </div>
 
@@ -369,11 +477,14 @@
                 } else {
                     geoRenderToggles();
                 }
-                banner.classList.add('visible');
             }
 
-            // Show banner if not already configured
-            if (!localStorage.getItem('vsp_consent_status')) { banner.classList.add('visible'); }
+            // Always allow showing the banner for changing choices
+            showBannerBtn.addEventListener('click', () => {
+                banner.classList.add('visible');
+                modal.classList.remove('visible');
+            });
+
             const hideAll = () => { banner.classList.remove('visible'); modal.classList.remove('visible'); };
             closeBannerBtn.addEventListener('click', () => { hideAll(); localStorage.setItem('vsp_consent_status', 'dismissed'); });
             footerLink.addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('visible'); });
@@ -428,10 +539,11 @@
                     await transcend.sync();
                     console.log('SUCCESS: Consent set locally and sync call initiated.');
                     localStorage.setItem('vsp_consent_status', 'configured');
-                    banner.classList.remove('visible');
                 } catch (error) {
                     console.error('An error occurred during consent processing:', error);
                 }
+                // Always hide the banner after clicking confirm
+                banner.classList.remove('visible');
             });
         });
     </script>
