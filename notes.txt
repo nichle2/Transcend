@@ -1,0 +1,15 @@
+consent-sync
+<script
+  data-cfasync="false"
+  data-sync-endpoint="https://consent-sync.visionworks.com/consent-manager/843a2eb4-77c8-4184-9136-71d50fe29864"
+  src="https://consent-modules.visionworks.com/cm/843a2eb4-77c8-4184-9136-71d50fe29864/airgap.js"
+></script>
+
+
+preventDefault
+
+<script
+  data-cfasync="false"
+  src="https://consent-modules.visionworks.com/cm/843a2eb4-77c8-4184-9136-71d50fe29864/airgap.js"
+></script>
+

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final VSP Implementation: Custom UI + Live API</title>
+
+    <!-- PART 1: THE LIVE SCRIPT WITH onload & UI DISABLED -->
+    <script
+      data-cfasync="false"
+      src="https://consent-modules.visionworks.com/cm-test/843a2eb4-77c8-4184-9136-71d50fe29864/airgap.js"
+      data-ui="off"
+      onload="window.airgapAuthEvent = event"
+    ></script>
+
+    <!-- PART 2: THE CRITICAL API STUB -->
+    <script>
+      try {
+        if (!self?.transcend?.ready) {
+          self.transcend = {
+            readyQueue: [],
+            ready(callback) { this.readyQueue.push(callback); },
+            ...self.transcend,
+          };
+        }
+      } catch (e) { console.log('Transcend stub exception: ', e); }
+    </script>
+
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 0; padding-bottom: 150px; }
+        header, footer { background-color: #0b2335; color: #ffffff; padding: 1rem 2rem; text-align: center; }
+        main { padding: 2rem; min-height: 80vh; }
+        footer a { color: #b0c4de; text-decoration: underline; cursor: pointer; }
+        footer a:hover { color: #ffffff; }
+
+        #custom-consent-banner, #custom-consent-modal { display: none; z-index: 2147483647; }
+        #custom-consent-banner.visible, #custom-consent-modal.visible { display: flex; }
+        #custom-consent-banner { position: fixed; bottom: 0; width: 100%; background-color: #eaf0f6; color: #1c1c1b; border-top: 1px solid #d8dde1; padding: 15px 30px; box-sizing: border-box; align-items: center; justify-content: center; }
+        #custom-consent-banner .content { display: flex; align-items: center; justify-content: space-between; max-width: 1200px; width: 100%; gap: 20px; }
+        #custom-consent-banner p a { color: #1c1c1b; font-weight: bold; text-decoration: underline; cursor: pointer; }
+        #custom-consent-banner .close-btn { font-size: 20px; border: 1px solid #aaa; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; background: transparent; flex-shrink: 0; }
+        
+        #custom-consent-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); align-items: center; justify-content: center; }
+        #custom-consent-modal .modal-content { background-color: #eaf0f6; padding: 40px; border-radius: 8px; text-align: center; max-width: 850px; width: 90%; }
+        #custom-consent-modal h2 { font-size: 24px; font-weight: bold; margin-bottom: 30px; }
+        #custom-consent-modal .toggles-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-bottom: 40px; }
+        #custom-consent-modal label { display: flex; align-items: center; cursor: pointer; }
+        #custom-consent-modal input[type="checkbox"] { width: 20px; height: 20px; margin-right: 8px; accent-color: #0d2f53; }
+        #custom-consent-modal .confirm-btn { background-color: #0d2f53; color: white; border: none; border-radius: 5px; padding: 15px 50px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header><h1>Mock Site Header</h1></header>
+    <main><h2>Page Content</h2></main>
+    <footer><p>© 2023 | <a id="cookie-choices-link">Your Cookie Choices</a></p></footer>
+
+    <!-- PART 3: OUR CUSTOM-BUILT HTML UI -->
+    <div id="custom-consent-banner">
+        <div class="content">
+            <div>
+                <p style="font-size: 1.5em; font-weight: bold; margin-bottom: 1em;">To offer a personalized experience, this site uses cookies & tracking technologies.</p>
+                <p>By using our sites, you consent to the recording, use, & sharing of your site activity by us & our providers & agree to our latest 
+                    <a href="https://www.vsp.com/legal/privacy-statement" target="_blank" rel="noopener noreferrer">Privacy Statement</a> & 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a> including the 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Class Action Waiver</a> & 
+                    <a href="https://www.vsp.com/legal/terms-and-conditions?anchor=dispute-resolution" target="_blank" rel="noopener noreferrer">Mandatory Arbitration</a>. 
+                    <!-- =================================================================== -->
+                    <!-- THE NEWLY ADDED LINK IS HERE                                        -->
+                    <!-- =================================================================== -->
+                    <a href="#" id="open-modal-from-banner-link">Manage your cookie preferences</a> or use the link at the bottom of the page.
+                </p>
+            </div>
+            <button id="close-banner-btn" class="close-btn" aria-label="Close banner">✕</button>
+        </div>
+    </div>
+
+    <div id="custom-consent-modal">
+        <form id="consent-form" class="modal-content">
+            <h2>Please select which types of cookies you would like to have enabled:</h2>
+            <div class="toggles-container">
+                <label><input type="checkbox" name="functionality" checked> Functionality</label>
+                <label><input type="checkbox" name="analytics" checked> Analytics</label>
+                <label><input type="checkbox" name="advertising" checked> Advertising</label>
+                <label><input type="checkbox" name="sale-of-personal-information" checked> Sale of personal information</label>
+            </div>
+            <button type="submit" class="confirm-btn">CONFIRM</button>
+        </form>
+    </div>
+
+    <!-- PART 4: OUR CUSTOM JAVASCRIPT "GLUE" -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const banner = document.getElementById('custom-consent-banner');
+            const modal = document.getElementById('custom-consent-modal');
+            const consentForm = document.getElementById('consent-form');
+            const closeBannerBtn = document.getElementById('close-banner-btn');
+            const footerLink = document.getElementById('cookie-choices-link');
+            // ===================================================================
+            // JAVASCRIPT UPDATE: Get the new link from inside the banner
+            // ===================================================================
+            const openModalLink = document.getElementById('open-modal-from-banner-link');
+
+            if (!localStorage.getItem('vsp_consent_status')) { banner.classList.add('visible'); }
+            const hideAll = () => { banner.classList.remove('visible'); modal.classList.remove('visible'); };
+            closeBannerBtn.addEventListener('click', () => { hideAll(); localStorage.setItem('vsp_consent_status', 'dismissed'); });
+            footerLink.addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('visible'); });
+
+            // ===================================================================
+            // JAVASCRIPT UPDATE: Add the event listener for the new link
+            // ===================================================================
+            openModalLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                banner.classList.remove('visible'); // Hide the banner
+                modal.classList.add('visible');   // Show the modal
+            });
+
+            consentForm.addEventListener('submit', async (clickEvent) => {
+                clickEvent.preventDefault(); 
+                hideAll();
+                const toggles = consentForm.querySelectorAll('input[type="checkbox"]');
+                const consentChoices = {};
+                toggles.forEach(toggle => { consentChoices[toggle.name] = toggle.checked; });
+                const authEvent = window.airgapAuthEvent || clickEvent;
+
+                try {
+                    const transcend = await new Promise(resolve => self.transcend.ready(resolve));
+                    await transcend.setConsent(authEvent, consentChoices);
+                    await transcend.sync();
+                    console.log('SUCCESS: Consent set locally and sync call initiated.');
+                    localStorage.setItem('vsp_consent_status', 'configured');
+                } catch (error) {
+                    console.error('An error occurred during consent processing:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
