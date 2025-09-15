@@ -1,0 +1,29 @@
+{
+  "project": "Transcend Consent Manager Customization",
+  "description": "Key memories and important elements to preserve for future merges or upgrades.",
+  "customized_index": {
+    "file": "index.customized.html",
+    "preserve_elements": [
+      "Custom consent banner and modal UI/UX with horizontal flex layout for toggles and confirm button",
+      "Consent language and legal links above toggles and confirm button in banner",
+      "Large, blue, bold confirm button with matching style in both banner and modal",
+      "Banner/modal always allow showing for changing choices, regardless of previous consent",
+      "Region-based toggles and logic for GDPR, CCPA, US Opt-In, etc.",
+      "Simulate member login toggle for demo purposes",
+      "Footer link to open consent modal",
+      "View state buttons for testing (Show Banner, Show Modal, Hide All, Reset Consent)",
+      "All consent logic and UI is self-contained in index.customized.html for demo/testing"
+    ],
+    "important_js": [
+      "renderToggles(region) function for dynamic toggle rendering",
+      "Event listeners for region toggles, login toggle, view state buttons, and confirm actions",
+      "Consent choices stored in localStorage and synced via transcend.setConsent()"
+    ],
+    "css_notes": [
+      "Banner and modal use matching flexbox layout and spacing",
+      "Confirm button is always inline with toggles, never full width",
+      "Banner/modal have increased vertical padding for visual comfort"
+    ]
+  },
+  "merge_guidance": "When updating from the official repo, always preserve the above UI/UX customizations and demo/testing logic from index.customized.html. If the official index.html is replaced, use this config to re-integrate custom elements."
+}

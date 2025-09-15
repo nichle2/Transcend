@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Banner Example - Transcend Recommended</title>
+    <style>
+        /* Copy all styles from index.customized.html */
+        body { font-family: sans-serif; line-height: 1.6; margin: 0; padding-bottom: 150px; }
+        header, footer { background-color: #0b2335; color: #ffffff; padding: 1rem 2rem; text-align: center; }
+        main { padding: 2rem; min-height: 80vh; }
+        footer a { color: #b0c4de; text-decoration: underline; cursor: pointer; }
+        footer a:hover { color: #ffffff; }
+        .view-state-btns { margin: 2rem 0; display: flex; gap: 1rem; justify-content: center; }
+        .view-state-btns button { padding: 0.5rem 1.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #0d2f53; background: #eaf0f6; color: #0d2f53; cursor: pointer; }
+        .view-state-btns button.active { background: #0d2f53; color: #fff; }
+    </style>
+    <!-- Transcend Consent Manager UI script (recommended) -->
+    <script src="https://unpkg.com/@transcend-io/consent-manager-ui@latest/build/ui.js" defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/@transcend-io/consent-manager-ui@latest/build/cm.css" />
+</head>
+<body>
+    <header><h1>Consent Banner Example - Transcend Recommended</h1></header>
+    <main>
+        <h2>Demo: Footer Link & Banner View States</h2>
+        <div class="view-state-btns">
+            <button id="show-banner-btn">Show Banner</button>
+            <button id="show-modal-btn">Show Modal</button>
+            <button id="hide-all-btn">Hide All</button>
+            <button id="reset-btn">Reset Consent</button>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1em; margin-bottom: 2em;">
+            <label><input type="radio" name="region-toggle" value="EU"> Europe (GDPR)</label>
+            <label><input type="radio" name="region-toggle" value="CA"> California (CCPA)</label>
+            <label><input type="radio" name="region-toggle" value="VA"> Virginia</label>
+            <label><input type="radio" name="region-toggle" value="US_OPTIN"> All US Opt-In States</label>
+            <label><input type="radio" name="region-toggle" value="US"> USA (General)</label>
+            <label><input type="radio" name="region-toggle" value="DEFAULT" checked> Auto (Geo/IP)</label>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 2em;">
+            <label style="font-weight:bold;cursor:pointer;">
+                <input type="checkbox" id="login-toggle" style="margin-right:8px;"> Simulate Member Login (access to benefits/health info)
+            </label>
+        </div>
+        <p>This page demonstrates a footer link that opens the consent options modal, and buttons to simulate different view states for testing.</p>
+    </main>
+    <footer><p>© 2023 | <a id="cookie-choices-link">Your Cookie Choices</a></p></footer>
+
+    <!-- Transcend Consent Manager UI root element -->
+    <div id="transcend-consent-manager-root"></div>
+
+    <script>
+        // Initialize Transcend Consent Manager UI (recommended approach)
+        window.transcend = window.transcend || {};
+        window.transcend.init = window.transcend.init || function(){};
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Transcend Consent Manager UI with your project key
+            window.transcend.init({
+                apiKey: '843a2eb4-77c8-4184-9136-71d50fe29864',
+                // You can add more config options here if needed
+            });
+
+            // Demo controls (simulate view state buttons, region, login, etc.)
+            // These would interact with the Transcend UI via its API if needed
+            const showBannerBtn = document.getElementById('show-banner-btn');
+            const showModalBtn = document.getElementById('show-modal-btn');
+            const hideAllBtn = document.getElementById('hide-all-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const regionRadios = document.querySelectorAll('input[name="region-toggle"]');
+            const loginToggle = document.getElementById('login-toggle');
+            const footerLink = document.getElementById('cookie-choices-link');
+
+            // Example: Show consent banner
+            showBannerBtn.addEventListener('click', function() {
+                if (window.transcend && window.transcend.showBanner) {
+                    window.transcend.showBanner();
+                }
+            });
+            // Example: Show consent modal
+            showModalBtn.addEventListener('click', function() {
+                if (window.transcend && window.transcend.showModal) {
+                    window.transcend.showModal();
+                }
+            });
+            // Example: Hide all
+            hideAllBtn.addEventListener('click', function() {
+                if (window.transcend && window.transcend.hideAll) {
+                    window.transcend.hideAll();
+                }
+            });
+            // Example: Reset consent
+            resetBtn.addEventListener('click', function() {
+                if (window.transcend && window.transcend.resetConsent) {
+                    window.transcend.resetConsent();
+                }
+            });
+            // Example: Region toggle (for demo, not standard in Transcend UI)
+            regionRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    // You may need to reload or re-init the UI with a new region for demo
+                    // This is not standard in Transcend UI, but can be simulated for demo
+                });
+            });
+            // Example: Login toggle (for demo)
+            loginToggle.addEventListener('change', function() {
+                // Simulate login state if needed
+            });
+            // Example: Footer link opens consent modal
+            footerLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (window.transcend && window.transcend.showModal) {
+                    window.transcend.showModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
